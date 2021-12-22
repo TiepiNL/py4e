@@ -56,7 +56,7 @@ except:
 
 
 # Wrapper around os.getenv.
-def get_envvar(key, required = False):
+def get_envvar(key, required=False):
     val = getenv(key)
     if val is None:
         logtxt = "Failed to retrieve environment variable '{}'.".format(key)
@@ -67,12 +67,12 @@ def get_envvar(key, required = False):
     return val
 
 
-def run_command(cmd, return_output = True):
-#@TODO: track and report duration
+def run_command(cmd, return_output=True):
+    # @TODO: track and report duration
     try:
-        stdout = run(cmd, text = True, capture_output = return_output).stdout
+        stdout = run(cmd, text=True, capture_output=return_output).stdout
     except Exception as err:
-        print("Failed to run command '{}'. {}".format(cmd[0],err))
+        print("Failed to run command '{}'. {}".format(cmd[0], err))
         quit()
 
     if return_output:
@@ -80,19 +80,19 @@ def run_command(cmd, return_output = True):
 
 
 def read_textfile(file):
-        try:
-            fhandler = open(file)
-        except Exception as err:
-            print("Can't open file: '{}'. {}".format(fagentlog, err))
-            quit()
+    try:
+        fhandler = open(file)
+    except Exception as err:
+        print("Can't open file: '{}'. {}".format(fagentlog, err))
+        quit()
 
-        lines = fhandler.readlines()
-        fhandler.close()
+    lines = fhandler.readlines()
+    fhandler.close()
 
-        return lines
+    return lines
 
 
-def write_textfile(file,content):
+def write_textfile(file, content):
     try:
         fhandler = open(file, "w")
     except Exception as err:
@@ -128,7 +128,8 @@ def reload_agent_config():
         log.warning("Something went wrong while reloading the agent config.")
         success = False
     else:
-        if prt: print("Successfully reloaded the agent configuration.")
+        if prt:
+            print("Successfully reloaded the agent configuration.")
         success = True
 
     return success
@@ -141,19 +142,22 @@ def restart_service(service_name):
         logtxt = "could not restart the '{}' service:".format(service_name)
         print(logtxt, err)
     logtxt = "Successfully restarted the '{}' service.".format(service_name)
-    if prt: print(logtxt)
+    if prt:
+        print(logtxt)
 
 
 def test_agent(ftestoutput, fopen):
-    if prt: print("Generating test output - this can take up to one minute.")
+    if prt:
+        print("Generating test output - this can take up to one minute.")
     result = run_command([check_mk_agent, "test"])
     # Write the output of the testrun to a text file.
-    write_textfile(ftestoutput,result)
+    write_textfile(ftestoutput, result)
 
     logtxt = ("Test run completed successfully. "
-             + "Output is available here: '{}'.".format(ftestoutput))
+              + "Output is available here: '{}'.".format(ftestoutput))
     if fopen == False:
-        if prt: print(logtxt)
+        if prt:
+            print(logtxt)
         return
     log.info(logtxt)
 
@@ -183,13 +187,14 @@ def match_config(config):
             cfg = "all"
     return cfg
 
+
 def get_agent_config(fconfigoutput, section, config, fopen):
     yml = match_config(config)
 
     # Rename the destination file. Use the same filepath, but with an extra
     # suffix based on the used config file (all, default, bakery, or user).
     fconfigoutput = "{}_{}{}".format(fconfigoutput[:len(fconfigoutput)-4],
-                    config, fconfigoutput[len(fconfigoutput)-4:])
+                                     config, fconfigoutput[len(fconfigoutput)-4:])
 
     if yml == "all":
         # Section "all" is non-existing and only used for parameter validation.
@@ -260,9 +265,10 @@ def get_agent_config(fconfigoutput, section, config, fopen):
     write_textfile(fconfigoutput, cfg)
 
     logtxt = ("Successfully exported the agent configuration. "
-             + "Output is available here: '{}'.".format(fconfigoutput))
+              + "Output is available here: '{}'.".format(fconfigoutput))
     if fopen == False:
-        if prt: print(logtxt)
+        if prt:
+            print(logtxt)
         return
     log.info(logtxt)
 
@@ -295,13 +301,14 @@ def open_agent_log(fagentlog, byexception, fopen):
         # Export the stripped log to a new file. Use the same filepath as the
         # agent logfile, with an extra suffix.
         fagentlog = "{}_exceptions{}".format(fagentlog[:len(fagentlog)-4],
-                    fagentlog[len(fagentlog)-4:])
+                                             fagentlog[len(fagentlog)-4:])
         write_textfile(fagentlog, events)
 
     logtxt = ("Successfully exported the exceptions from the agent log. "
-             + "Output is available here: '{}'.".format(fagentlog))
+              + "Output is available here: '{}'.".format(fagentlog))
     if fopen == False:
-        if prt: print(logtxt)
+        if prt:
+            print(logtxt)
         return
     log.info(logtxt)
 
@@ -315,7 +322,7 @@ def get_setting(fconfigoutput, config, section, question):
     # (all, default, bakery, or user).
     yml = match_config(config)
     fconfigoutput = "{}_{}{}".format(fconfigoutput[:len(fconfigoutput)-4],
-                    config, fconfigoutput[len(fconfigoutput)-4:])
+                                     config, fconfigoutput[len(fconfigoutput)-4:])
     lines = read_textfile(fconfigoutput)
 
     for line in lines:
@@ -329,31 +336,31 @@ def get_setting(fconfigoutput, config, section, question):
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-v", "--verbose", help = "increase output verbosity for "
+parser.add_argument("-v", "--verbose", help="increase output verbosity for "
                     + "debugging purposes",
-                    action = "store_true")
-parser.add_argument("-q", "--quiet", help = "don't print any output",
-                    action = "store_true")
-parser.add_argument("-a", "--action", choices = ["version", "reload", "restart",
+                    action="store_true")
+parser.add_argument("-q", "--quiet", help="don't print any output",
+                    action="store_true")
+parser.add_argument("-a", "--action", choices=["version", "reload", "restart",
                     "test", "config", "log", "setting"],
-                    help = "action to perform")
-parser.add_argument("-s", "--section", choices = ["all", "fileinfo", "global",
+                    help="action to perform")
+parser.add_argument("-s", "--section", choices=["all", "fileinfo", "global",
                     "local", "logfiles", "logwatch", "mrpe", "plugins", "ps",
-                    "spool", "system", "winperf"], help = "set scope")
-parser.add_argument("-c", "--config", choices = ["all", "default", "bakery",
-                    "user"], help = "the config to display. 'All' returns the "
+                                                "spool", "system", "winperf"], help="set scope")
+parser.add_argument("-c", "--config", choices=["all", "default", "bakery",
+                    "user"], help="the config to display. 'All' returns the "
                     + "merged config.")
-parser.add_argument("-?", "--question", help = "setting to return")
-parser.add_argument("-e", "--byexception", help = "only display warning and "
+parser.add_argument("-?", "--question", help="setting to return")
+parser.add_argument("-e", "--byexception", help="only display warning and "
                     + "critical log messages (for the log-action).",
-                    action = "store_true")
-parser.add_argument("-o", "--open", dest = "open", help = "open saved data in "
+                    action="store_true")
+parser.add_argument("-o", "--open", dest="open", help="open saved data in "
                     + " a text viewer (supported by the following actions: "
-                    + "test, config, log)", action = "store_true")
-parser.add_argument("-n-o", "--no-open", dest = "open", help = "only save data "
+                    + "test, config, log)", action="store_true")
+parser.add_argument("-n-o", "--no-open", dest="open", help="only save data "
                     + " without opening it (supported by the following "
-                    + "actions: test, config, log)", action = "store_false")
-parser.set_defaults(section = "all", config = "all", open = True)
+                    + "actions: test, config, log)", action="store_false")
+parser.set_defaults(section="all", config="all", open=True)
 args = parser.parse_args()
 
 if args.verbose:
@@ -378,7 +385,7 @@ if system() == "Windows":
     fconfigoutput = CUSTOM_AGENT_PATH + "log\\config.txt"
     viewer = "notepad.exe"
 elif system() == "Linux":
-    #@TODO: Linux paths
+    # @TODO: Linux paths
     pass
 else:
     log.error("Unsupported system:", system())
@@ -400,10 +407,10 @@ elif args.action == "restart":
     # Note: Service restart requires an elevated session.
     restart_service("CheckMkService")
 elif args.action == "test":
-    test_agent(ftestoutput,args.open)
+    test_agent(ftestoutput, args.open)
 elif args.action == "config":
-    get_agent_config(fconfigoutput,args.section,args.config,args.open)
+    get_agent_config(fconfigoutput, args.section, args.config, args.open)
 elif args.action == "log":
-    open_agent_log(fagentlog,args.byexception,args.open)
+    open_agent_log(fagentlog, args.byexception, args.open)
 elif args.action == "setting":
-    print(get_setting(fconfigoutput,args.config,args.section,args.question))
+    print(get_setting(fconfigoutput, args.config, args.section, args.question))
