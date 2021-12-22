@@ -178,11 +178,11 @@ def match_config(config):
         # For the agent configuration three files are read sequentially and
         # hierarchically:
         # 1) The default configuration is stored here.
-        check_mk_yml = PROGRAMFILES86 + "\\checkmk\\service\\check_mk.yml"
+        check_mk_yml = "{0}\\checkmk\\service\\check_mk.yml".format(PROGRAMFILES86)
         # 2) Created by the Agent Bakery, and overrides the default values.
-        check_mk_bakery_yml = CUSTOM_AGENT_PATH + "bakery\\check_mk.bakery.yml"
+        check_mk_bakery_yml = "{0}\\bakery\\check_mk.bakery.yml".format(CUSTOM_AGENT_PATH)
         # 3) For manual customizations. overrides default and Bakery values.
-        check_mk_user_yml = CUSTOM_AGENT_PATH + "check_mk.user.yml"
+        check_mk_user_yml = "{0}\\check_mk.user.yml".format(CUSTOM_AGENT_PATH)
 
     match config:
         case "default":
@@ -392,7 +392,7 @@ if system() == "Windows":
     PROGRAMFILES86 = get_envvar("ProgramFiles(x86)", True)
     CUSTOM_AGENT_PATH = "{0}\\checkmk\\agent".format(PROGRAMDATA)
     check_mk_agent = "{0}\\checkmk\\service\\check_mk_agent.exe".format(PROGRAMFILES86)
-    fagentlog = "{0}log\\check_mk.log".format(CUSTOM_AGENT_PATH)
+    fagentlog = "{0}\\log\\check_mk.log".format(CUSTOM_AGENT_PATH)
     ftestoutput = "{0}\\log\\testrun.txt".format(CUSTOM_AGENT_PATH)
     fconfigoutput = "{0}\\log\\config.txt".format(CUSTOM_AGENT_PATH)
     viewer = "notepad.exe"
