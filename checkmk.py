@@ -18,23 +18,24 @@ py checkmk.py -a setting -? passphrase
 py checkmk.py -a setting --section global -? encrypted
 """
 
-from os import path
-from os import getenv
-from os.path import exists
-from platform import system
 import argparse
 import logging as log
-from shlex import split
-from shlex import quote
-import subprocess
+from os import getenv
+from os import path
+from os.path import exists
 import pathlib
+from platform import system
+from shlex import quote
+from shlex import split
+import subprocess
+import sys
 
 try:
     import win32serviceutil as win32_service
 except:
     print("can't import win32serviceutil.",
           "Install it with 'pip install pywin32'.")
-    quit()
+    sys.exit(1)
 
 
 def get_envvar(key, required=False):
@@ -49,7 +50,7 @@ def get_envvar(key, required=False):
         logtxt = "Failed to retrieve environment variable '{0}'.".format(key)
         if required:
             log.error(logtxt)
-            quit()
+            sys.exit(1)
         log.info(logtxt)
     return val
 
@@ -66,7 +67,7 @@ def run_command_async(command_line):
         subprocess.Popen(cmd_args)
     except Exception as err:
         print("Failed to open program '{0}'. {1}".format(cmd_args[0], err))
-        quit()
+        sys.exit(1)
 
 
 def run_command(command_line):
@@ -82,7 +83,7 @@ def run_command(command_line):
         stdout = subprocess.run(cmd_args, text=True, capture_output=True).stdout
     except Exception as err:
         print("Failed to run command '{0}'. {1}".format(cmd_args[0], err))
-        quit()
+        sys.exit(1)
     return stdout
 
 
@@ -98,7 +99,7 @@ def read_textfile(file):
             lines = file.readlines()
     except Exception as err:
         print("Can't open file: '{0}'. {1}".format(fagentlog, err))
-        quit()
+        sys.exit(1)
     return lines
 
 
@@ -114,9 +115,8 @@ def write_textfile(file, content):
         with file_path.open(mode="w") as file:
             file.write(content)
     except Exception as err:
-        print("Can't create/open file '{0}' for writing. {1}".format(
-              file, err))
-        quit()
+        print("Can't create/open file '{0}' for writing. {1}".format(file, err))
+        sys.exit(1)
 
 
 def get_agent_version():
@@ -132,7 +132,7 @@ def get_agent_version():
     pos = result.find(pfx)
     if pos == -1:
         log.error("Command output has an unexpected format.")
-        quit()
+        sys.exit(1)
 
     version = (result[pos + len(pfx):]).strip()
     logtxt = "Successfully retrieved the agent version: '{0}'.".format(version)
@@ -419,12 +419,12 @@ elif system() == "Linux":
     pass
 else:
     log.error("Unsupported system:", system())
-    quit()
+    sys.exit(1)
 
 fexists = exists(check_mk_agent)
 if not fexists:
     log.error("checkmk agent not found!")
-    quit()
+    sys.exit(1)
 
 if args.action == 'version':
     print(get_agent_version())
