@@ -26,6 +26,7 @@ import argparse
 import logging as log
 import shlex
 import subprocess
+import pathlib
 
 try:
     import win32serviceutil as win32_service
@@ -85,27 +86,25 @@ def run_command(command_line):
 
 
 def read_textfile(file):
+    file_path = pathlib.Path(file)
     try:
-        fhandler = open(file)
+        with file_path.open(mode="r") as file:
+            lines = file.readlines()
     except Exception as err:
         print("Can't open file: '{0}'. {1}".format(fagentlog, err))
         quit()
-
-    lines = fhandler.readlines()
-    fhandler.close()
-
     return lines
 
 
 def write_textfile(file, content):
+    file_path = pathlib.Path(file)
     try:
-        fhandler = open(file, "w")
+        with file_path.open(mode="w") as file:
+            file.write(content)
     except Exception as err:
         print("Can't create/open file '{0}' for writing. {1}".format(
               file, err))
         quit()
-    fhandler.write(content)
-    fhandler.close()
 
 
 def get_agent_version():
