@@ -1,21 +1,5 @@
 """
-Requires pywin32
-1. py -m pip install --upgrade pip
-2. pip install pywin32 --upgrade
-(https://github.com/mhammond/pywin32/releases)
-
-EXAMPLES
-py checkmk.py --help
-py checkmk.py --action version
-py checkmk.py -a reload --verbose
-py checkmk.py -a restart
-py checkmk.py -a test
-py checkmk.py -a config --no-open
-py checkmk.py -a config -c user
-py checkmk.py -a log
-py checkmk.py -a log --byexception
-py checkmk.py -a setting -? passphrase
-py checkmk.py -a setting --section global -? encrypted
+@TODO docs
 """
 
 import argparse
@@ -30,12 +14,14 @@ from shlex import split
 import subprocess
 import sys
 
-try:
-    import win32serviceutil as win32_service
-except:
-    print("can't import win32serviceutil.",
-          "Install it with 'pip install pywin32'.")
-    sys.exit(1)
+# pywin32 is (only) required on Windows systems.
+if system() == "Windows":
+    try:
+        import win32serviceutil as win32_service
+    except:
+        print("can't import win32serviceutil.",
+              "Install it with 'pip install pywin32'.")
+        sys.exit(1)
 
 
 def get_envvar(key, required=False):
