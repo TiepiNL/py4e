@@ -3,7 +3,6 @@
 # 2. pip install pywin32 --upgrade
 # (https://github.com/mhammond/pywin32/releases)
 
-
 # EXAMPLES
 # py checkmk.py --help
 # py checkmk.py --action version
@@ -49,6 +48,7 @@ def get_envvar(key, required=False):
 
 def run_command(cmd, return_output=True):
     # @TODO: track and report duration
+    # @TODO: finish script while notepad is open
     try:
         stdout = run(cmd, text=True, capture_output=return_output).stdout
     except Exception as err:
