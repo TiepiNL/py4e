@@ -24,7 +24,8 @@ from os.path import exists
 from platform import system
 import argparse
 import logging as log
-import shlex
+from shlex import split
+from shlex import quote
 import subprocess
 import pathlib
 
@@ -60,7 +61,7 @@ def run_command_async(command_line):
     :return: N/A
     """
     # Break the shell command into a sequence of arguments.
-    cmd_args = shlex.split(command_line)
+    cmd_args = split(command_line)
     try:
         subprocess.Popen(cmd_args)
     except Exception as err:
@@ -72,11 +73,11 @@ def run_command(command_line):
     """
     Execute a shell command synchronously and capture the output.
     :param command_line: shell command to execute.
-    :return: str
+    :return: command output (str)
     @TODO: track and (verbose) report duration
     """
     # Break the shell command into a sequence of arguments.
-    cmd_args = shlex.split(command_line)
+    cmd_args = split(command_line)
     try:
         stdout = subprocess.run(cmd_args, text=True, capture_output=True).stdout
     except Exception as err:
@@ -86,6 +87,11 @@ def run_command(command_line):
 
 
 def read_textfile(file):
+    """
+    Open a text file and return the content.
+    :param file: the file to read.
+    :return: all lines in the file (list)
+    """
     file_path = pathlib.Path(file)
     try:
         with file_path.open(mode="r") as file:
@@ -97,6 +103,12 @@ def read_textfile(file):
 
 
 def write_textfile(file, content):
+    """
+    Open a text file and (over)write content to it.
+    :param file: the file to write to.
+    :param content: the content to write to the file.
+    :return: N/A
+    """
     file_path = pathlib.Path(file)
     try:
         with file_path.open(mode="w") as file:
@@ -108,7 +120,11 @@ def write_textfile(file, content):
 
 
 def get_agent_version():
-    cmd = "'{0}' version".format(check_mk_agent)
+    """
+    Retrieve the Check_MK Agent version.
+    :return: agent version (str) - e.g. '1.6.0p18'
+    """
+    cmd = "{0} version".format(quote(check_mk_agent))
     result = run_command(cmd)
     # The output should look like "Check_MK Agent version 1.6.0p18".
     # Strip the prefix to get the version number.
@@ -125,7 +141,11 @@ def get_agent_version():
 
 
 def reload_agent_config():
-    cmd = "'{0}' reload_config".format(check_mk_agent)
+    """
+    Reload the Check_MK Agent configuration.
+    :return: success (bool)
+    """
+    cmd = "{0} reload_config".format(quote(check_mk_agent))
     result = run_command(cmd)
 
     # The last line of the output should be "Done."
@@ -136,7 +156,6 @@ def reload_agent_config():
         if prt:
             print("Successfully reloaded the agent configuration.")
         success = True
-
     return success
 
 
@@ -154,7 +173,7 @@ def restart_service(service_name):
 def test_agent(ftestoutput, viewfile):
     if prt:
         print("Generating test output - this can take up to one minute.")
-    cmd = "'{0}' test".format(check_mk_agent)
+    cmd = "{0} test".format(quote(check_mk_agent))
     result = run_command(cmd)
     # Write the output of the testrun to a text file.
     write_textfile(ftestoutput, result)
@@ -168,7 +187,7 @@ def test_agent(ftestoutput, viewfile):
     log.info(logtxt)
 
     # Open the test output.
-    cmd = "'{0}' '{1}'".format(viewer, ftestoutput)
+    cmd = "{0} {1}".format(quote(viewer), quote(ftestoutput))
     run_command_async(cmd)
 
 
@@ -206,9 +225,9 @@ def get_agent_config(fconfigoutput, section, config, viewfile):
     if yml == "all":
         # Section "all" is non-existing and only used for parameter validation.
         if section == "all":
-            cmd = "'{0}' showconfig".format(check_mk_agent)
+            cmd = "{0} showconfig".format(quote(check_mk_agent))
         else:
-            cmd = "'{0}' showconfig {1}".format(check_mk_agent, section)
+            cmd = "{0} showconfig {1}".format(quote(check_mk_agent), section)
         result = run_command(cmd)
         # Write the running config to a text file.
         write_textfile(fconfigoutput, result)
@@ -280,7 +299,7 @@ def get_agent_config(fconfigoutput, section, config, viewfile):
     log.info(logtxt)
 
     # Open the config output.
-    cmd = "'{0}' '{1}'".format(viewer, fconfigoutput)
+    cmd = "{0} {1}".format(quote(viewer), quote(fconfigoutput))
     run_command_async(cmd)
 
 
@@ -320,7 +339,7 @@ def open_agent_log(fagentlog, byexception, viewfile):
         return
     log.info(logtxt)
 
-    cmd = "'{0}' '{1}'".format(viewer, fagentlog)
+    cmd = "{0} {1}".format(quote(viewer), quote(fagentlog))
     run_command_async(cmd)
 
 
