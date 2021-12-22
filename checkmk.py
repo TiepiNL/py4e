@@ -1,20 +1,22 @@
-# Requires pywin32
-# 1. py -m pip install --upgrade pip
-# 2. pip install pywin32 --upgrade
-# (https://github.com/mhammond/pywin32/releases)
+"""
+Requires pywin32
+1. py -m pip install --upgrade pip
+2. pip install pywin32 --upgrade
+(https://github.com/mhammond/pywin32/releases)
 
-# EXAMPLES
-# py checkmk.py --help
-# py checkmk.py --action version
-# py checkmk.py -a reload --verbose
-# py checkmk.py -a restart
-# py checkmk.py -a test
-# py checkmk.py -a config --no-open
-# py checkmk.py -a config -c user
-# py checkmk.py -a log
-# py checkmk.py -a log --byexception
-# py checkmk.py -a setting -? passphrase
-# py checkmk.py -a setting --section global -? encrypted
+EXAMPLES
+py checkmk.py --help
+py checkmk.py --action version
+py checkmk.py -a reload --verbose
+py checkmk.py -a restart
+py checkmk.py -a test
+py checkmk.py -a config --no-open
+py checkmk.py -a config -c user
+py checkmk.py -a log
+py checkmk.py -a log --byexception
+py checkmk.py -a setting -? passphrase
+py checkmk.py -a setting --section global -? encrypted
+"""
 
 from os import path
 from os import getenv
@@ -22,9 +24,8 @@ from os.path import exists
 from platform import system
 import argparse
 import logging as log
-
-from subprocess import check_output
-from subprocess import run
+import shlex
+import subprocess
 
 try:
     import win32serviceutil as win32_service
@@ -34,11 +35,16 @@ except:
     quit()
 
 
-# Wrapper around os.getenv.
 def get_envvar(key, required=False):
+    """
+    Wrapper around os.getenv with traceback handling.
+    :param key: environment variable to lookup.
+    :param required: throw an error amd quit if the key doesn't exist.
+    :return: environment variable (str)
+    """
     val = getenv(key)
     if val is None:
-        logtxt = "Failed to retrieve environment variable '{}'.".format(key)
+        logtxt = "Failed to retrieve environment variable '{0}'.".format(key)
         if required:
             log.error(logtxt)
             quit()
@@ -46,24 +52,43 @@ def get_envvar(key, required=False):
     return val
 
 
-def run_command(cmd, return_output=True):
-    # @TODO: track and report duration
-    # @TODO: finish script while notepad is open
+def run_command_async(command_line):
+    """
+    Execute a shell command asynchronously.
+    :param command_line: shell command to execute.
+    :return: N/A
+    """
+    # Break the shell command into a sequence of arguments.
+    cmd_args = shlex.split(command_line)
     try:
-        stdout = run(cmd, text=True, capture_output=return_output).stdout
+        subprocess.Popen(cmd_args)
     except Exception as err:
-        print("Failed to run command '{}'. {}".format(cmd[0], err))
+        print("Failed to open program '{0}'. {1}".format(cmd_args[0], err))
         quit()
 
-    if return_output:
-        return stdout
+
+def run_command(command_line):
+    """
+    Execute a shell command synchronously and capture the output.
+    :param command_line: shell command to execute.
+    :return: str
+    @TODO: track and (verbose) report duration
+    """
+    # Break the shell command into a sequence of arguments.
+    cmd_args = shlex.split(command_line)
+    try:
+        stdout = subprocess.run(cmd_args, text=True, capture_output=True).stdout
+    except Exception as err:
+        print("Failed to run command '{0}'. {1}".format(cmd_args[0], err))
+        quit()
+    return stdout
 
 
 def read_textfile(file):
     try:
         fhandler = open(file)
     except Exception as err:
-        print("Can't open file: '{}'. {}".format(fagentlog, err))
+        print("Can't open file: '{0}'. {1}".format(fagentlog, err))
         quit()
 
     lines = fhandler.readlines()
@@ -76,7 +101,7 @@ def write_textfile(file, content):
     try:
         fhandler = open(file, "w")
     except Exception as err:
-        print("Can't create/open file '{}' for writing. {}".format(
+        print("Can't create/open file '{0}' for writing. {1}".format(
               file, err))
         quit()
     fhandler.write(content)
@@ -84,8 +109,8 @@ def write_textfile(file, content):
 
 
 def get_agent_version():
-    result = run_command([check_mk_agent, "version"])
-
+    cmd = "'{0}' version".format(check_mk_agent)
+    result = run_command(cmd)
     # The output should look like "Check_MK Agent version 1.6.0p18".
     # Strip the prefix to get the version number.
     pfx = "Check_MK Agent version"
@@ -95,13 +120,14 @@ def get_agent_version():
         quit()
 
     version = (result[pos + len(pfx):]).strip()
-    logtxt = "Successfully retrieved the agent version: '{}'.".format(version)
+    logtxt = "Successfully retrieved the agent version: '{0}'.".format(version)
     log.info(logtxt)
     return version
 
 
 def reload_agent_config():
-    result = run_command([check_mk_agent, "reload_config"])
+    cmd = "'{0}' reload_config".format(check_mk_agent)
+    result = run_command(cmd)
 
     # The last line of the output should be "Done."
     if result.strip()[len(result)-5:] != 'Done.':
@@ -119,9 +145,9 @@ def restart_service(service_name):
     try:
         win32_service.RestartService(service_name)
     except Exception as err:
-        logtxt = "could not restart the '{}' service:".format(service_name)
+        logtxt = "could not restart the '{0}' service:".format(service_name)
         print(logtxt, err)
-    logtxt = "Successfully restarted the '{}' service.".format(service_name)
+    logtxt = "Successfully restarted the '{0}' service.".format(service_name)
     if prt:
         print(logtxt)
 
@@ -129,12 +155,13 @@ def restart_service(service_name):
 def test_agent(ftestoutput, viewfile):
     if prt:
         print("Generating test output - this can take up to one minute.")
-    result = run_command([check_mk_agent, "test"])
+    cmd = "'{0}' test".format(check_mk_agent)
+    result = run_command(cmd)
     # Write the output of the testrun to a text file.
     write_textfile(ftestoutput, result)
 
     logtxt = ("Test run completed successfully. "
-              + "Output is available here: '{}'.".format(ftestoutput))
+              + "Output is available here: '{0}'.".format(ftestoutput))
     if not viewfile:
         if prt:
             print(logtxt)
@@ -142,7 +169,8 @@ def test_agent(ftestoutput, viewfile):
     log.info(logtxt)
 
     # Open the test output.
-    run_command([viewer, ftestoutput], False)
+    cmd = "'{0}' '{1}'".format(viewer, ftestoutput)
+    run_command_async(cmd)
 
 
 def match_config(config):
@@ -173,15 +201,15 @@ def get_agent_config(fconfigoutput, section, config, viewfile):
 
     # Rename the destination file. Use the same filepath, but with an extra
     # suffix based on the used config file (all, default, bakery, or user).
-    fconfigoutput = "{}_{}{}".format(fconfigoutput[:len(fconfigoutput)-4],
-                                     config, fconfigoutput[len(fconfigoutput)-4:])
+    fconfigoutput = "{0}_{1}{2}".format(fconfigoutput[:len(fconfigoutput)-4],
+                                        config, fconfigoutput[len(fconfigoutput)-4:])
 
     if yml == "all":
         # Section "all" is non-existing and only used for parameter validation.
         if section == "all":
-            cmd = [check_mk_agent, "showconfig"]
+            cmd = "'{0}' showconfig".format(check_mk_agent)
         else:
-            cmd = [check_mk_agent, "showconfig", section]
+            cmd = "'{0}' showconfig {1}".format(check_mk_agent, section)
         result = run_command(cmd)
         # Write the running config to a text file.
         write_textfile(fconfigoutput, result)
@@ -245,7 +273,7 @@ def get_agent_config(fconfigoutput, section, config, viewfile):
     write_textfile(fconfigoutput, cfg)
 
     logtxt = ("Successfully exported the agent configuration. "
-              + "Output is available here: '{}'.".format(fconfigoutput))
+              + "Output is available here: '{0}'.".format(fconfigoutput))
     if not viewfile:
         if prt:
             print(logtxt)
@@ -253,7 +281,8 @@ def get_agent_config(fconfigoutput, section, config, viewfile):
     log.info(logtxt)
 
     # Open the config output.
-    run_command([viewer, fconfigoutput], False)
+    cmd = "'{0}' '{1}'".format(viewer, fconfigoutput)
+    run_command_async(cmd)
 
 
 def open_agent_log(fagentlog, byexception, viewfile):
@@ -272,7 +301,7 @@ def open_agent_log(fagentlog, byexception, viewfile):
         if len(events) == 0:
             print("No warning/error events detected in the current log.")
             quit()
-        log.info("{} warning/error events detected in the current log.".format(
+        log.info("{0} warning/error events detected in the current log.".format(
                  len(events)))
 
         separator = '\n'
@@ -280,19 +309,20 @@ def open_agent_log(fagentlog, byexception, viewfile):
 
         # Export the stripped log to a new file. Use the same filepath as the
         # agent logfile, with an extra suffix.
-        fagentlog = "{}_exceptions{}".format(fagentlog[:len(fagentlog)-4],
-                                             fagentlog[len(fagentlog)-4:])
+        fagentlog = "{0}_exceptions{1}".format(fagentlog[:len(fagentlog)-4],
+                                               fagentlog[len(fagentlog)-4:])
         write_textfile(fagentlog, events)
 
     logtxt = ("Successfully exported the exceptions from the agent log. "
-              + "Output is available here: '{}'.".format(fagentlog))
+              + "Output is available here: '{0}'.".format(fagentlog))
     if not viewfile:
         if prt:
             print(logtxt)
         return
     log.info(logtxt)
 
-    run_command([viewer, fagentlog], False)
+    cmd = "'{0}' '{1}'".format(viewer, fagentlog)
+    run_command_async(cmd)
 
 
 def get_setting(fconfigoutput, config, section, question):
@@ -301,18 +331,18 @@ def get_setting(fconfigoutput, config, section, question):
     # Retrieve the source file, based on the used config file
     # (all, default, bakery, or user).
     yml = match_config(config)
-    fconfigoutput = "{}_{}{}".format(fconfigoutput[:len(fconfigoutput)-4],
-                                     config, fconfigoutput[len(fconfigoutput)-4:])
+    fconfigoutput = "{0}_{1}{2}".format(fconfigoutput[:len(fconfigoutput)-4],
+                                        config, fconfigoutput[len(fconfigoutput)-4:])
     lines = read_textfile(fconfigoutput)
 
     for line in lines:
-        if line.lstrip().startswith("{}:".format(question)):
+        if line.lstrip().startswith("{0}:".format(question)):
             pos = line.find(":")
             result = line[pos+1:].strip()
-            log.info("Lookup succeeded: key '{}' has the value '{}'.".format(
+            log.info("Lookup succeeded: key '{0}' has the value '{1}'.".format(
                      question, result))
             return result
-    log.info("Lookup failed: can't find key '{}'.".format(question))
+    log.info("Lookup failed: can't find key '{0}'.".format(question))
 
 
 parser = argparse.ArgumentParser()
@@ -326,7 +356,8 @@ parser.add_argument("-a", "--action", choices=["version", "reload", "restart",
                     help="action to perform")
 parser.add_argument("-s", "--section", choices=["all", "fileinfo", "global",
                     "local", "logfiles", "logwatch", "mrpe", "plugins", "ps",
-                                                "spool", "system", "winperf"], help="set scope")
+                                                "spool", "system", "winperf"],
+                    help="set scope")
 parser.add_argument("-c", "--config", choices=["all", "default", "bakery",
                     "user"], help="the config to display. 'All' returns the "
                     + "merged config.")
@@ -349,8 +380,9 @@ if args.verbose:
 else:
     log.basicConfig(format="%(levelname)s: %(message)s")
 
-# Print output?
-if args.quiet:
+# Don't print feedback if the quiet switch is set, or if a single
+# setting ("question") is returned.
+if args.quiet or (args.action == "setting" and args.question):
     prt = False
 else:
     prt = True
@@ -358,11 +390,11 @@ else:
 if system() == "Windows":
     PROGRAMDATA = get_envvar("PROGRAMDATA", True)
     PROGRAMFILES86 = get_envvar("ProgramFiles(x86)", True)
-    CUSTOM_AGENT_PATH = PROGRAMDATA + "\\checkmk\\agent\\"
-    check_mk_agent = PROGRAMFILES86 + "\\checkmk\\service\\check_mk_agent.exe"
-    fagentlog = CUSTOM_AGENT_PATH + "log\\check_mk.log"
-    ftestoutput = CUSTOM_AGENT_PATH + "log\\testrun.txt"
-    fconfigoutput = CUSTOM_AGENT_PATH + "log\\config.txt"
+    CUSTOM_AGENT_PATH = "{0}\\checkmk\\agent".format(PROGRAMDATA)
+    check_mk_agent = "{0}\\checkmk\\service\\check_mk_agent.exe".format(PROGRAMFILES86)
+    fagentlog = "{0}log\\check_mk.log".format(CUSTOM_AGENT_PATH)
+    ftestoutput = "{0}\\log\\testrun.txt".format(CUSTOM_AGENT_PATH)
+    fconfigoutput = "{0}\\log\\config.txt".format(CUSTOM_AGENT_PATH)
     viewer = "notepad.exe"
 elif system() == "Linux":
     # @TODO: Linux paths
@@ -370,9 +402,6 @@ elif system() == "Linux":
 else:
     log.error("Unsupported system:", system())
     quit()
-
-CUSTOM_PLUGINS_PATH = CUSTOM_AGENT_PATH + "plugins"
-CUSTOM_LOCAL_PATH = CUSTOM_AGENT_PATH + "local"
 
 fexists = exists(check_mk_agent)
 if not fexists:
