@@ -39,7 +39,7 @@ def get_envvar(key, required=False):
     val = getenv(key)
     if val is None:
         logtxt = "Failed to retrieve environment variable '{}'.".format(key)
-        if required == True:
+        if required:
             log.error(logtxt)
             quit()
         log.info(logtxt)
@@ -126,7 +126,7 @@ def restart_service(service_name):
         print(logtxt)
 
 
-def test_agent(ftestoutput, fopen):
+def test_agent(ftestoutput, viewfile):
     if prt:
         print("Generating test output - this can take up to one minute.")
     result = run_command([check_mk_agent, "test"])
@@ -135,7 +135,7 @@ def test_agent(ftestoutput, fopen):
 
     logtxt = ("Test run completed successfully. "
               + "Output is available here: '{}'.".format(ftestoutput))
-    if fopen == False:
+    if not viewfile:
         if prt:
             print(logtxt)
         return
@@ -168,7 +168,7 @@ def match_config(config):
     return cfg
 
 
-def get_agent_config(fconfigoutput, section, config, fopen):
+def get_agent_config(fconfigoutput, section, config, viewfile):
     yml = match_config(config)
 
     # Rename the destination file. Use the same filepath, but with an extra
@@ -246,7 +246,7 @@ def get_agent_config(fconfigoutput, section, config, fopen):
 
     logtxt = ("Successfully exported the agent configuration. "
               + "Output is available here: '{}'.".format(fconfigoutput))
-    if fopen == False:
+    if not viewfile:
         if prt:
             print(logtxt)
         return
@@ -256,8 +256,8 @@ def get_agent_config(fconfigoutput, section, config, fopen):
     run_command([viewer, fconfigoutput], False)
 
 
-def open_agent_log(fagentlog, byexception, fopen):
-    if byexception == True:
+def open_agent_log(fagentlog, byexception, viewfile):
+    if byexception:
         lines = read_textfile(fagentlog)
 
         events = []
@@ -286,7 +286,7 @@ def open_agent_log(fagentlog, byexception, fopen):
 
     logtxt = ("Successfully exported the exceptions from the agent log. "
               + "Output is available here: '{}'.".format(fagentlog))
-    if fopen == False:
+    if not viewfile:
         if prt:
             print(logtxt)
         return
@@ -375,7 +375,7 @@ CUSTOM_PLUGINS_PATH = CUSTOM_AGENT_PATH + "plugins"
 CUSTOM_LOCAL_PATH = CUSTOM_AGENT_PATH + "local"
 
 fexists = exists(check_mk_agent)
-if fexists == False:
+if not fexists:
     log.error("checkmk agent not found!")
     quit()
 
