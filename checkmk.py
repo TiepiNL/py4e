@@ -3,29 +3,9 @@
 # 2. pip install pywin32 --upgrade
 # (https://github.com/mhammond/pywin32/releases)
 
-# options:
-#  -h, --help            show this help message and exit
-#  -v, --verbose         increase output verbosity for debugging purposes
-#  -q, --quiet           don't print any output
-#  -a {version,reload,restart,test,config,log,setting}, --action {version,
-#     reload,restart,test,config,log,setting}
-#                        action to perform
-#  -s {all,fileinfo,global,local,logfiles,logwatch,mrpe,plugins,ps,spool,
-#     system,winperf}, --section {all,fileinfo,global,local,logfiles,logwatch,
-#     mrpe,plugins,ps,spool,system,winperf}
-#                        set scope
-#  -c {all,default,bakery,user}, --config {all,default,bakery,user}
-#                        the config to display. 'All' returns the merged config.
-#  -? QUESTION, --question QUESTION
-#                        setting to return
-#  -e, --byexception     only display warning and critical log messages
-#                        (for the log-action).
-#  -o, --open            open saved data in a text viewer (supported by the
-#                        following actions: test, config, log)
-#  -n-o, --no-open       only save data without opening it (supported by the
-#                        following actions: test, config, log)
 
 # EXAMPLES
+# py checkmk.py --help
 # py checkmk.py --action version
 # py checkmk.py -a reload --verbose
 # py checkmk.py -a restart
