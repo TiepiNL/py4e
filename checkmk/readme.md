@@ -1,7 +1,7 @@
 # checkmk agent companion
 This program eases the life of sysadmins by providing features to troubleshoot the [checkmk agent for Windows]. Linux support will be added later. (**[checkmk]** is an open source infrastructure monitoring tool.)
 
-<img src="./img/placeholder.gif" alt="Animated gif with checkmk.py demo">
+<p><img src="./img/placeholder.gif" width="250px" height="187.5px" alt="Animated gif with checkmk.py demo"></p>
 
 ## Features
 
@@ -78,61 +78,61 @@ When calling `checkmk.py`, the following flags are available:
 py checkmk.py version
 ```
 The version-action executes the `check_mk_agent.exe version` command. It retrieves the version number from the returned output. For example, the output "Check_MK Agent version 1.6.0p18" becomes "1.6.0p18".
-<img src="./img/placeholder.png" alt="Example result of version action">
+<p><img src="./img/placeholder.png" width="250px" height="187.5px" alt="Example result of version action"></p>
 
 ```
 py checkmk.py reload
 ```
 The reload-action executes the `check_mk_agent.exe reload_config` command.
-<img src="./img/placeholder.png" alt="Example result of reload action">
+<p><img src="./img/placeholder.png" width="250px" height="187.5px" alt="Example result of reload action"></p>
 
 ```
 py checkmk.py restart
 ```
 Restarts the 'Check Mk Service'.
-<img src="./img/placeholder.png" alt="Example result of restart action">
+<p><img src="./img/placeholder.png" width="250px" height="187.5px" alt="Example result of restart action"></p>
 
 ```
 py checkmk.py test
 ```
 The test-action executes the `check_mk_agent.exe test` command, writes the output to a text file in the agent log directory, and opens the text file in Notepad (on Windows).
-<img src="./img/placeholder.png" alt="Example result of test action">
+<p><img src="./img/placeholder.png" width="250px" height="187.5px" alt="Example result of test action"></p>
 
 ```
 py checkmk.py config --no-open
 ```
 The config-action executes the `check_mk_agent.exe showconfig` command, and writes the output - the running config - to a text file in the agent log directory. With the `--no-open` flag set, the text file won't be opened.
-<img src="./img/placeholder.png" alt="Example result of config action with the no-open flag set">
+<p><img src="./img/placeholder.png" width="250px" height="187.5px" alt="Example result of config action with the no-open flag set"></p>
 
 ```
 py checkmk.py config -c user
 ```
 The `-c` (or `--config`) argument sets the [agent's configuration files] (default, bakery, or user) to retrieve. Like the default config-action (all), the output is written to a text file and opened.
-<img src="./img/placeholder.png" alt="Example result of config action with a config scope">
+<p><img src="./img/placeholder.png" width="250px" height="187.5px" alt="Example result of config action with a config scope"></p>
 
 ```
 py checkmk.py -config --section mrpe
 ```
 The `--section` (or `-s`) argument sets the config scope to retrieve. In this case, only the keys within the mrpe section will be retrieved. This only works with the running config ('all'), because it depends on the `check_mk_agent.exe showconfig [section]` command.
-<img src="./img/placeholder.png" alt="Example result of config action with a section scope">
+<p><img src="./img/placeholder.png" width="250px" height="187.5px" alt="Example result of config action with a section scope"></p>
 
 ```
 py checkmk.py config -? encrypted
 ```
 The `-?` (or `--question`) argument contains a specific key to lookup in the running config, and returns the value (if any).
-<img src="./img/placeholder.png" alt="Example result of config action with a question">
+<p><img src="./img/placeholder.png" width="250px" height="187.5px" alt="Example result of config action with a question"></p>
 
 ```
 py checkmk.py log
 ```
 Opens the checkmk agent log file, usually "C:\ProgramData\checkmk\agent\log\check_mk.log".
-<img src="./img/placeholder.png" alt="Example result of log action">
+<p><img src="./img/placeholder.png" width="250px" height="187.5px" alt="Example result of log action"></p>
 
 ```
 py checkmk.py log --byexception
 ```
 Extracts the critical and warning messages from the checkmk agent log file, writes them to a text file in the agent log directory, and opens the text file in Notepad (on Windows). `--byexception` can be aliased with `-e`.
-<img src="./img/placeholder.png" alt="Example result of log action with the by exception flag set">
+<p><img src="./img/placeholder.png" width="250px" height="187.5px" alt="Example result of log action with the by exception flag set"></p>
 
 
 [checkmk]:                      https://checkmk.com/
