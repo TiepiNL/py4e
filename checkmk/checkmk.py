@@ -28,7 +28,7 @@ def get_envvar(key, required=False):
     """
     Wrapper around os.getenv with traceback handling.
     :param key: environment variable to lookup.
-    :param required: throw an error amd quit if the key doesn't exist.
+    :param required: throw an error and quit if the key doesn't exist.
     :return: environment variable (str)
     """
     val = getenv(key)
@@ -226,14 +226,27 @@ def get_agent_config(fconfigoutput, section, config, viewfile):
 
     lines = read_textfile(fconfig)
 
-    cfg = []
+    # Comment lines are removed from the output. The exception is the
+    # informational header of the running config, which contains Environment
+    # Variables and the loaded config files.
+    if yml == "all" and section == "all":
+        info_header = True
+    else:
+        info_header = False
     skip = False
+    cfg = []
     for line in lines:
         # Remove empty lines and comment lines.
         if len(line.strip()) == 0:
+            # The first whiteline indicates the end of the informational header.
+            # From this point onwards all comment lines will be skipped.
+            if info_header:
+                info_header = False
             continue
         if line.lstrip().startswith("#"):
-            continue
+            # Skip all comment lines, except the informational header.
+            if not info_header:
+                continue
 
         # The merged config ("all") as retrieved via the 'showconfig' command
         # has all example code filtered out. The separate yaml file can have
@@ -304,7 +317,7 @@ def open_agent_log(fagentlog, byexception, viewfile):
 
         if len(events) == 0:
             print("No warning/error events detected in the current log.")
-            quit()
+            sys.exit(0)
         log.info("{0} warning/error events detected in the current log.".format(
                  len(events)))
 
@@ -355,16 +368,15 @@ parser.add_argument("-v", "--verbose", help="increase output verbosity for "
                     action="store_true")
 parser.add_argument("-q", "--quiet", help="don't print any output",
                     action="store_true")
-parser.add_argument("-a", "--action", choices=["version", "reload", "restart",
-                    "test", "config", "log", "setting"],
-                    help="action to perform")
+parser.add_argument("action", choices=["version", "reload", "restart",
+                    "test", "config", "log"], help="action to perform")
 parser.add_argument("-c", "--config", choices=["all", "default", "bakery",
                     "user"], help="the config to display. 'all' returns the "
                     + "(merged) runnig config")
 parser.add_argument("-s", "--section", choices=["all", "fileinfo", "global",
                     "local", "logfiles", "logwatch", "mrpe", "plugins", "ps",
                                                 "spool", "system", "winperf"],
-                    help="set scope")
+                    help="set config scope")
 parser.add_argument("-?", "--question", help="setting to return "
                     + " (only applicable to the setting-action)")
 parser.add_argument("-e", "--byexception", help="only display warning and "
@@ -385,9 +397,29 @@ if args.verbose:
 else:
     log.basicConfig(format="%(levelname)s: %(message)s")
 
+action = args.action
+# Validate argument combinations.
+# A question cannot be combined with a action other than 'config'.
+if args.question and action != "config":
+    log.error("The --question parameter (or its alias -?) cannot be "
+              + "combined with an action other than 'config'.")
+    sys.exit(1)
+
+# Section based scoping only works on the running config ("all").
+if args.section != "all" and args.config != "all":
+    log.error("Cannot combine a section scope with a configuration scope "
+              + "(other than 'all').")
+    sys.exit(1)
+
+# Log events "by Exception" cannot be combined with a action other than 'log'.
+if args.byexception and action != "log":
+    log.error("The --byexception parameter (or its alias -e) cannot be "
+              + "combined with an action other than 'log'.")
+    sys.exit(1)
+
 # Don't print feedback if the quiet switch is set, or if a single
 # setting ("question") is returned.
-if args.quiet or (args.action == "setting" and args.question):
+if args.quiet or args.question:
     prt = False
 else:
     prt = True
@@ -413,18 +445,19 @@ if not fexists:
     log.error("checkmk agent not found!")
     sys.exit(1)
 
-if args.action == 'version':
+if action == 'version':
     print(get_agent_version())
-elif args.action == "reload":
+elif action == "reload":
     reload_agent_config()
-elif args.action == "restart":
+elif action == "restart":
     # Note: Service restart requires an elevated session.
     restart_service("CheckMkService")
-elif args.action == "test":
+elif action == "test":
     test_agent(ftestoutput, args.open)
-elif args.action == "config":
-    get_agent_config(fconfigoutput, args.section, args.config, args.open)
-elif args.action == "log":
+elif action == "config":
+    if args.question:
+        print(get_setting(fconfigoutput, args.config, args.section, args.question))
+    else:
+        get_agent_config(fconfigoutput, args.section, args.config, args.open)
+elif action == "log":
     open_agent_log(fagentlog, args.byexception, args.open)
-elif args.action == "setting":
-    print(get_setting(fconfigoutput, args.config, args.section, args.question))
