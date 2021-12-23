@@ -1,7 +1,7 @@
 # checkmk agent companion
 This program eases the life of sysadmins by providing features to troubleshoot the [checkmk agent for Windows]. Linux support will be added later. (**[checkmk]** is an open source infrastructure monitoring tool.)
 
-image_placeholder
+<img src="./img/placeholder.gif" alt="Animated gif with checkmk.py demo">
 
 ## Features
 
@@ -38,9 +38,10 @@ or alternatively, get [pywin32] from GitHub.
 ## Usage
 
 ```
-checkmk.py [-h] [-v] [-q] [-a {version,reload,restart,test,config,log,setting}]
-           [-s {all,fileinfo,global,local,logfiles,logwatch,mrpe,plugins,ps,spool,system,winperf}]
-           [-c {all,default,bakery,user}] [-? QUESTION] [-e] [-o] [-n-o]
+checkmk.py [-h] [-v] [-q] [-c {all,default,bakery,user}]
+                  [-s {all,fileinfo,global,local,logfiles,logwatch,mrpe,plugins,ps,spool,system,winperf}]
+                  [-? QUESTION] [-e] [-o] [-n-o]
+                  {version,reload,restart,test,config,log}
 ```
 
 ### Options
@@ -52,14 +53,16 @@ When calling `checkmk.py`, the following flags are available:
   - increase output verbosity for debugging purposes
 - `-q, --quiet`
   - don't print any output
-- `-a, --action {version,reload,restart,test,config,log,setting}`
+- `action {version,reload,restart,test,config,log}`
   - action to perform: the main features of the program
 - `-c, --config {all,default,bakery,user}`
   - the config to display. 'all' returns the (merged) running config
+  - specify which of the [agent’s configuration files] should be retrieved
 - `-s, --section {all,fileinfo,global,local,logfiles,logwatch,mrpe,plugins,ps,spool,system,winperf}`
-  - set scope
+  - set config scope
+  - cannot be combined with `--config`
 - `-?, --question QUESTION`
-  - setting to return (only applicable to the setting-action)
+  - setting to return (only applicable to the config-action)
 - `-e,  --byexception`
   - only display warning and critical log messages (only applicable to the log-action)              
 - `-o, --open`
@@ -72,50 +75,67 @@ When calling `checkmk.py`, the following flags are available:
 ### Examples
 
 ```
-py checkmk.py --action version
+py checkmk.py version
 ```
-The version-action executes the `check_mk_agent.exe version` command.
-It retrieves the version number from the returned output. For example,
-the output "Check_MK Agent version 1.6.0p18" becomes "1.6.0p18".
+The version-action executes the `check_mk_agent.exe version` command. It retrieves the version number from the returned output. For example, the output "Check_MK Agent version 1.6.0p18" becomes "1.6.0p18".
+<img src="./img/placeholder.png" alt="Example result of version action">
 
 ```
-py checkmk.py -a reload
+py checkmk.py reload
 ```
 The reload-action executes the `check_mk_agent.exe reload_config` command.
+<img src="./img/placeholder.png" alt="Example result of reload action">
 
 ```
-py checkmk.py -a restart
+py checkmk.py restart
 ```
 Restarts the 'Check Mk Service'.
+<img src="./img/placeholder.png" alt="Example result of restart action">
 
 ```
-py checkmk.py -a test --verbose
+py checkmk.py test
 ```
+The test-action executes the `check_mk_agent.exe test` command, writes the output to a text file in the agent log directory, and opens the text file in Notepad (on Windows).
+<img src="./img/placeholder.png" alt="Example result of test action">
 
 ```
-py checkmk.py -a config --no-open
+py checkmk.py config --no-open
 ```
+The config-action executes the `check_mk_agent.exe showconfig` command, and writes the output - the running config - to a text file in the agent log directory. With the `--no-open` flag set, the text file won't be opened.
+<img src="./img/placeholder.png" alt="Example result of config action with the no-open flag set">
 
 ```
-py checkmk.py -a config -c user
+py checkmk.py config -c user
 ```
+The `-c` (or `--config`) argument sets the [agent's configuration files] (default, bakery, or user) to retrieve. Like the default config-action (all), the output is written to a text file and opened.
+<img src="./img/placeholder.png" alt="Example result of config action with a config scope">
 
 ```
-py checkmk.py -a log
+py checkmk.py -config --section mrpe
 ```
+The `--section` (or `-s`) argument sets the config scope to retrieve. In this case, only the keys within the mrpe section will be retrieved. This only works with the running config ('all'), because it depends on the `check_mk_agent.exe showconfig [section]` command.
+<img src="./img/placeholder.png" alt="Example result of config action with a section scope">
 
 ```
-py checkmk.py -a log --byexception
+py checkmk.py config -? encrypted
 ```
+The `-?` (or `--question`) argument contains a specific key to lookup in the running config, and returns the value (if any).
+<img src="./img/placeholder.png" alt="Example result of config action with a question">
 
 ```
-py checkmk.py -a setting -? passphrase
+py checkmk.py log
 ```
+Opens the checkmk agent log file, usually "C:\ProgramData\checkmk\agent\log\check_mk.log".
+<img src="./img/placeholder.png" alt="Example result of log action">
 
 ```
-py checkmk.py -a setting --section global -? encrypted
+py checkmk.py log --byexception
 ```
+Extracts the critical and warning messages from the checkmk agent log file, writes them to a text file in the agent log directory, and opens the text file in Notepad (on Windows). `--byexception` can be aliased with `-e`.
+<img src="./img/placeholder.png" alt="Example result of log action with the by exception flag set">
+
 
 [checkmk]:                      https://checkmk.com/
 [checkmk agent for Windows]:    https://docs.checkmk.com/latest/en/agent_windows.html
+[agent's configuration files]:  https://docs.checkmk.com/latest/en/agent_windows.html#heading__the_agents_configuration_files
 [pywin32]:                      https://github.com/mhammond/pywin32/releases
