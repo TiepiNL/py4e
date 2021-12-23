@@ -105,7 +105,7 @@ Restarts the 'Check Mk Service'.
 py checkmk.py test
 ```
 The test-action executes the `check_mk_agent.exe test` command, writes the output to a text file in the agent log directory, and opens the text file in Notepad (on Windows).
-<p><img src="./img/test_example.png" width="768px" height="456px" alt="Example result of test action"></p>
+<p><img src="./img/test_example.png" width="720px" height="428px" alt="Example result of test action"></p>
 
 ### Config
 
@@ -113,7 +113,7 @@ The test-action executes the `check_mk_agent.exe test` command, writes the outpu
 py checkmk.py config
 ```
 The config-action executes the `check_mk_agent.exe showconfig` command, and writes the output - the running config - to a text file in the agent log directory.
-<p><img src="./img/config_example.png" width="768px" height="634px" alt="Example result of config action with the no-open flag set"></p>
+<p><img src="./img/config_example.png" width="720px" height="594px" alt="Example result of config action with the no-open flag set"></p>
 
 ### Config - scoped
 
@@ -121,7 +121,7 @@ The config-action executes the `check_mk_agent.exe showconfig` command, and writ
 py checkmk.py config -c user
 ```
 The `-c` (or `--config`) argument sets the [agent's configuration files] (default, bakery, or user) to retrieve. Like the default config-action (all), the output is written to a text file and opened.
-<p><img src="./img/config_user_example.png" width="768px" height="396px" alt="Example result of config action with a config scope"></p>
+<p><img src="./img/config_user_example.png" width="720px" height="371px" alt="Example result of config action with a config scope"></p>
 
 ### Config - section
 
@@ -129,7 +129,7 @@ The `-c` (or `--config`) argument sets the [agent's configuration files] (defaul
 py checkmk.py -config --section mrpe --no-open
 ```
 The `--section` (or `-s`) argument sets the config scope to retrieve. In this case, only the keys within the mrpe section will be retrieved. This only works with the running config ('all'), because it depends on the `check_mk_agent.exe showconfig [section]` command. With the `--no-open` flag set, the text file won't be opened.
-<p><img src="./img/config_section_example.png" width="753px" height="135px" alt="Example result of config action with a section scope"></p>
+<p><img src="./img/config_section_example.png" width="720px" height="129px" alt="Example result of config action with a section scope"></p>
 
 ### Config - question
 
@@ -145,7 +145,7 @@ The `-?` (or `--question`) argument contains a specific key to lookup in the run
 py checkmk.py log
 ```
 Opens the checkmk agent log file, usually "C:\ProgramData\checkmk\agent\log\check_mk.log".
-<p><img src="./img/log_example.png" width="768px" height="393px" alt="Example result of log action"></p>
+<p><img src="./img/log_example.png" width="720px" height="368px" alt="Example result of log action"></p>
 
 ### Log - by exception
 
@@ -153,7 +153,15 @@ Opens the checkmk agent log file, usually "C:\ProgramData\checkmk\agent\log\chec
 py checkmk.py log --byexception
 ```
 Extracts the critical and warning messages from the checkmk agent log file, writes them to a text file in the agent log directory, and opens the text file in Notepad (on Windows). `--byexception` can be aliased with `-e`.
-<p><img src="./img/log_exception_example.png" width="768px" height="284px" alt="Example result of log action with the by exception flag set"></p>
+<p><img src="./img/log_exception_example.png" width="720px" height="266px" alt="Example result of log action with the by exception flag set"></p>
+
+### Log - unused sections
+
+```
+py checkmk.py log --byexception --no-open
+```
+If the log file contains warnings about unused sections, the log action with `--byexception` flag will also report these sections.
+<p><img src="./img/log_sections_example.png" width="720px" height="179px" alt="Example result of log action with unused section recommendations"></p>
 
 
 [checkmk]:                      https://checkmk.com/
