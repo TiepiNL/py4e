@@ -1,7 +1,7 @@
 # checkmk agent companion
-**[checkmk]** is an open source infrastructure monitoring tool.
+This program eases the life of sysadmins by providing features to troubleshoot the [checkmk agent for Windows]. Linux support will be added later. (**[checkmk]** is an open source infrastructure monitoring tool.)
 
-This program eases the life of sysadmins by providing features to troubleshoot the [checkmk agent for Windows]. Linux support will be added later.
+@TODO: create fancy gif with demo
 
 ## Features
 
@@ -42,18 +42,49 @@ When calling `checkmk.py`, the following flags are available:
 
 ### Examples
 
+```
 py checkmk.py --help
-py checkmk.py --action version
-py checkmk.py -a reload --verbose
-py checkmk.py -a restart
-py checkmk.py -a test
-py checkmk.py -a config --no-open
-py checkmk.py -a config -c user
-py checkmk.py -a log
-py checkmk.py -a log --byexception
-py checkmk.py -a setting -? passphrase
-py checkmk.py -a setting --section global -? encrypted
+```
 
+```
+py checkmk.py --action version
+```
+
+```
+py checkmk.py -a reload --verbose
+```
+
+```
+py checkmk.py -a restart
+```
+
+```
+py checkmk.py -a test
+```
+
+```
+py checkmk.py -a config --no-open
+```
+
+```
+py checkmk.py -a config -c user
+```
+
+```
+py checkmk.py -a log
+```
+
+```
+py checkmk.py -a log --byexception
+```
+
+```
+py checkmk.py -a setting -? passphrase
+```
+
+```
+py checkmk.py -a setting --section global -? encrypted
+```
 
 [checkmk]:                      https://checkmk.com/
 [checkmk agent for Windows]:    https://docs.checkmk.com/latest/en/agent_windows.html
