@@ -1,7 +1,7 @@
 # checkmk agent companion
 This program eases the life of sysadmins by providing features to troubleshoot the [checkmk agent for Windows]. Linux support will be added later. (**[checkmk]** is an open source infrastructure monitoring tool.)
 
-<p><img src="./img/placeholder.png" width="250px" height="187.5px" alt="Animated gif with checkmk.py demo"></p>
+<p><img src="./img/demo.gif" width="720px" height="576px" alt="Animated gif with checkmk.py demo"></p>
 
 
 ## Features
