@@ -9,6 +9,7 @@ from os import path
 from os.path import exists
 import pathlib
 from platform import system
+import re
 from shlex import quote
 from shlex import split
 import subprocess
@@ -306,12 +307,20 @@ def open_agent_log(fagentlog, byexception, viewfile):
     if byexception:
         lines = read_textfile(fagentlog)
 
-        events = []
+        events = list()
+        empty_sections = list()
         for line in lines:
             # Filter the agent log to create an exception log with warnings and
             # errors only.
             if line.find("[Err") == -1 and line.find("[Warn") == -1:
                 continue
+            # Check for potentially unused agent sections.
+            pattern = re.compile("Section '[a-z_]*' cannot provide data")
+            if pattern.search(line):
+                # Only interested in unique section names.
+                section = line.split("'")[1]
+                if section not in empty_sections:
+                    empty_sections.append(section)
             # Remove the linebreak at the end of each line.
             events.append(line.rstrip())
 
@@ -320,6 +329,18 @@ def open_agent_log(fagentlog, byexception, viewfile):
             sys.exit(0)
         log.info("{0} warning/error events detected in the current log.".format(
                  len(events)))
+
+        if len(empty_sections) > 0:
+            separator = ', '
+            empty_sections = separator.join(empty_sections)
+            logtxt = ("The following agent sections cannot provide any data: "
+                     + "'{}'. Disabling these sections - if unused - will "
+                     + "drastically reduce the amount of warning messages in "
+                     + "the agent log.").format(empty_sections)
+            if prt:
+                print(logtxt)
+            else:
+                log.info(logtxt)
 
         separator = '\n'
         events = separator.join(events)
