@@ -358,16 +358,17 @@ parser.add_argument("-q", "--quiet", help="don't print any output",
 parser.add_argument("-a", "--action", choices=["version", "reload", "restart",
                     "test", "config", "log", "setting"],
                     help="action to perform")
+parser.add_argument("-c", "--config", choices=["all", "default", "bakery",
+                    "user"], help="the config to display. 'all' returns the "
+                    + "(merged) runnig config")
 parser.add_argument("-s", "--section", choices=["all", "fileinfo", "global",
                     "local", "logfiles", "logwatch", "mrpe", "plugins", "ps",
                                                 "spool", "system", "winperf"],
                     help="set scope")
-parser.add_argument("-c", "--config", choices=["all", "default", "bakery",
-                    "user"], help="the config to display. 'All' returns the "
-                    + "merged config.")
-parser.add_argument("-?", "--question", help="setting to return")
+parser.add_argument("-?", "--question", help="setting to return "
+                    + " (only applicable to the setting-action)")
 parser.add_argument("-e", "--byexception", help="only display warning and "
-                    + "critical log messages (for the log-action).",
+                    + "critical log messages (for the log-action)",
                     action="store_true")
 parser.add_argument("-o", "--open", dest="open", help="open saved data in "
                     + " a text viewer (supported by the following actions: "
