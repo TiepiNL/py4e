@@ -1,9 +1,19 @@
 # checkmk agent companion
-**[checkmk]** is an open source infrastructure monitoring tool. 
+**[checkmk]** is an open source infrastructure monitoring tool.
 
-This program contains features to troubleshoot the [checkmk agent for Windows]. Linux support will be added later.
+This program eases the life of sysadmins by providing features to troubleshoot the [checkmk agent for Windows]. Linux support will be added later.
 
 ## Features
+
+- Get the agent version
+- Reload the agent configuration
+- Restart the checkmk agent service
+- Show the output of an agent test
+- Open the agent log file
+- Filter the agent log on errors/warnings
+- Show the running agent config
+- Show the stored configs (default, bakery, or user)
+- Lookup the value of a specific config setting
 
 ## Requirements
 
@@ -13,7 +23,7 @@ On Windows systems, this program requires pywin32. Install it via pip:
 ```
 pip install pywin32 --upgrade
 ```
-or alternatively, get [pywin32] from GitHub. 
+or alternatively, get [pywin32] from GitHub.
 
 ## Usage
 
