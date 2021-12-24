@@ -15,12 +15,13 @@ I currently follow the [Python for Everybody Specialization] MOOC at Coursera. I
 - [ ] [Using Databases with Python]
 - [ ] [Capstone: Retrieving, Processing, and Visualizing Data with Python]
 
+
 **Current course: Python Data Structures**
 - [x] Week 1 - Chapter Six: Strings
 - [x] Week 2 - Unit: Installing and Using Python
 - [x] Week 3 - Chapter Seven: Files
 - [x] Week 4 - Chapter Eight: Lists
-- [ ] Week 5 - Chapter Nine: Dictionaries
+- [x] Week 5 - Chapter Nine: Dictionaries
 - [ ] Week 6 - Chapter Ten: Tuples
 - [ ] Week 7 - Graduation
 
