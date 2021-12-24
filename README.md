@@ -4,7 +4,7 @@ Tom's playground to practice Python.
 
 ## Coursera
 
-I currently follow the [Python for Everybody Specialization] MOOC at Coursera. I use this repo to store my course assignments, and some small projects to practice (perhaps they once become repos on their own).
+I currently follow the [Python for Everybody Specialization] MOOC at Coursera. I use this repo to store my course assignments, and some small projects to practise (perhaps they once become repos on their own).
 
 ### Progress
 
