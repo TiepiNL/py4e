@@ -1,5 +1,5 @@
 """
-@TODO docs
+Features for troubleshooting the checkmk agent
 """
 
 import argparse
