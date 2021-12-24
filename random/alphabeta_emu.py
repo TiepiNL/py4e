@@ -1,29 +1,9 @@
 """
-Alphabet stuff
+Stripped version of alphabeta.py, compatible with:
+https://www.programiz.com/python-programming/online-compiler/
 """
 
-import pathlib
-import sys
 import re
-
-
-def read_textfile(file):
-    """
-    Open a text file and return the content.
-    :param file: the file to read.
-    :return: file content (str)
-    """
-    file_path = pathlib.Path(file)
-    try:
-        with file_path.open(mode="r", encoding="utf-8") as fopen:
-            lines = fopen.readlines()
-    except Exception as err:
-        logtxt = f"Can't open file: '{file}'. {err}"
-        print(logtxt)
-        sys.exit(1)
-    content = "\n".join(lines)
-    return content
-
 
 def test_abc_word(word):
     """
@@ -41,6 +21,7 @@ def test_abc_word(word):
             abc_word = False
             break
     return abc_word
+
 
 def get_abc_words(words, sort=True, abc=True, case_sensitive=False):
     """
@@ -74,8 +55,6 @@ def get_abc_words(words, sort=True, abc=True, case_sensitive=False):
     return lmatches
 
 
-TEXTFILE = "words.txt"
-INPUT = read_textfile(TEXTFILE)
 INPUT = "Accent, chloor, chloor, beknopte, floppy, glossy, dikkop"
 matched_words = get_abc_words(INPUT)
 print(", ".join(matched_words))
