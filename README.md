@@ -18,7 +18,7 @@ I currently follow the [Python for Everybody Specialization] MOOC at Coursera. I
 
 **Current course: Using Python to Access Web Data**
 - [x] Week 1 - Getting Started
-- [ ] Week 2 - Regular Expressions (Chapter 11)
+- [x] Week 2 - Regular Expressions (Chapter 11)
 - [ ] Week 3 - Networks and Sockets (Chapter 12)
 - [ ] Week 4 - Programs that Surf the Web (Chapter 12)
 - [ ] Week 5 - Web Services and XML (Chapter 13)
