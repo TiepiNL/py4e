@@ -13,13 +13,14 @@ from shlex import quote
 from shlex import split
 import subprocess
 import sys
+import win32api
 
 # pywin32 is (only) required on Windows systems.
 if system() == "Windows":
     try:
         import win32serviceutil as win32_service
-    except Exception:
-        print("can't import win32serviceutil.",
+    except ModuleNotFoundError as error:
+        print(f"Can't import win32serviceutil: {error}.",
               "Install it with 'pip install pywin32'.")
         sys.exit(1)
 
@@ -75,29 +76,43 @@ def run_command_async(command_line):
     cmd_args = split(command_line)
     try:
         subprocess.Popen(cmd_args)
-    except Exception as err:
-        logtxt = f"Failed to open program '{cmd_args[0]}'. {err}"
+    except OSError as err:
+        logtxt = f"Failed to open program '{cmd_args[0]}'. {err}."
         print(logtxt)
         sys.exit(1)
 
 
-def run_command(command_line):
+def run_command(command_line, timeout_sec=10):
     """
     Execute a shell command synchronously and capture the output.
     :param command_line: shell command to execute.
+    :param timeout: timeout in seconds. If the timeout expires, the
+    child process will be killed and waited for.
     :return: command output (str)
     @TODO: track and (verbose) report duration
     """
     # Break the shell command into a sequence of arguments.
     cmd_args = split(command_line)
     try:
-        stdout = subprocess.run(cmd_args, text=True,
-                                capture_output=True, check=True).stdout
-    except Exception as err:
-        logtxt = f"Failed to run command '{cmd_args[0]}'. {err}"
+        result = subprocess.run(
+            cmd_args, text=True, capture_output=True, check=True, timeout=timeout_sec)
+    except OSError as err:
+        logtxt = f"Failed to run command '{cmd_args[0]}'. {err}."
         print(logtxt)
         sys.exit(1)
-    return stdout
+    except subprocess.TimeoutExpired as err:
+        logtxt = (
+            f"Execution of command '{cmd_args}' exceeded the timeout value of {timeout_sec}s. "
+            f"{err}."
+        )
+        print(logtxt)
+        sys.exit(1)
+    except subprocess.CalledProcessError as err:
+        logtxt = f"Command '{cmd_args}' returned a non-zero exit status. {err}."
+        print(logtxt)
+        sys.exit(1)
+
+    return result.stdout
 
 
 def read_textfile(file):
@@ -110,10 +125,11 @@ def read_textfile(file):
     try:
         with file_path.open(mode="r", encoding="utf-8") as fopen:
             lines = fopen.readlines()
-    except Exception as err:
-        logtxt = f"Can't open file: '{file}'. {err}"
+    except OSError as err:
+        logtxt = f"Can't open file: '{file}'. {err}."
         print(logtxt)
         sys.exit(1)
+
     return lines
 
 
@@ -128,8 +144,8 @@ def write_textfile(file, content):
     try:
         with file_path.open(mode="w", encoding="utf-8") as fopen:
             fopen.write(content)
-    except Exception as err:
-        logtxt = f"Can't create/open file '{file}' for writing. {err}"
+    except OSError as err:
+        logtxt = f"Can't create/open file '{file}' for writing. {err}."
         print(logtxt)
         sys.exit(1)
 
@@ -184,8 +200,8 @@ def restart_service(service_name):
     """
     try:
         win32_service.RestartService(service_name)
-    except Exception as err:
-        logtxt = f"could not restart the '{service_name}' service. {err}"
+    except win32api.error as err:
+        logtxt = f"could not restart the '{service_name}' service. {err}."
         print(logtxt)
         return FAILURE
     logtxt = f"Successfully restarted the '{service_name}' service."
@@ -206,7 +222,7 @@ def test_agent(output_file, viewfile):
     if PRT:
         print("Generating test output - this can take up to one minute.")
     cmd = f"{quote(CHECK_MK_AGENT)} test"
-    result = run_command(cmd)
+    result = run_command(cmd, 60)
     # Write the output of the testrun to a text file.
     write_textfile(output_file, result)
 
