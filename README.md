@@ -10,20 +10,20 @@ I currently follow the [Python for Everybody Specialization] MOOC at Coursera. I
 
 **Courses:**
 - [x] [Programming for Everybody (Getting Started with Python)]
-- [ ] [Python Data Structures]
+- [X] [Python Data Structures]
 - [ ] [Using Python to Access Web Data]
 - [ ] [Using Databases with Python]
 - [ ] [Capstone: Retrieving, Processing, and Visualizing Data with Python]
 
 
-**Current course: Python Data Structures**
-- [x] Week 1 - Chapter Six: Strings
-- [x] Week 2 - Unit: Installing and Using Python
-- [x] Week 3 - Chapter Seven: Files
-- [x] Week 4 - Chapter Eight: Lists
-- [x] Week 5 - Chapter Nine: Dictionaries
-- [ ] Week 6 - Chapter Ten: Tuples
-- [ ] Week 7 - Graduation
+**Current course: Using Python to Access Web Data**
+- [x] Week 1 - Getting Started
+- [ ] Week 2 - Regular Expressions (Chapter 11)
+- [ ] Week 3 - Networks and Sockets (Chapter 12)
+- [ ] Week 4 - Programs that Surf the Web (Chapter 12)
+- [ ] Week 5 - Web Services and XML (Chapter 13)
+- [ ] Week 6 - JSON and the REST Architecture (Chapter 13)
+
 
 [Python for Everybody Specialization]:                                https://www.coursera.org/specializations/python
 [Programming for Everybody (Getting Started with Python)]:            https://www.coursera.org/learn/python
