@@ -54,8 +54,8 @@ def add_filename_suffix(filename, suffix, before_ext=True, separator="_"):
     """
     if filename.find(".") != -1 and before_ext:
         pieces = filename.split(".")
-        ext = pieces[len(pieces)-1]
-        name = ''.join(pieces[:len(pieces)-1])
+        ext = pieces[-1]
+        name = ''.join(pieces[:-1])
         new_filename = f"{name}{separator}{suffix}.{ext}"
     else:
         new_filename = f"{filename}{separator}{suffix}"
@@ -180,7 +180,7 @@ def reload_agent_config():
     result = run_command(cmd)
 
     # The last line of the output should be "Done."
-    if result.strip()[len(result)-5:] != 'Done.':
+    if result.strip()[-5:] != 'Done.':
         log.warning("Something went wrong while reloading the agent config.")
         return FAILURE
     else:
