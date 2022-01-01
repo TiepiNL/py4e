@@ -1,0 +1,99 @@
+Hello and welcome to our course on python classes.
+I am Dave Dalsveen, your instructor.
+for this course. There are many object oriented programming
+languages, these days, Java, Csharp and C plus plus, to name
+a few. You can add python to the list as well.
+Object oriented languages help us develop programs that makes
+sense to humans.
+When we think of a car we think, in terms of a car object, a red
+sports car for example.
+A manufacturing plant has one template for a car
+and manufactures thousands of individual cars with various
+colors and features using that one blueprint.
+The blueprint is analogous to the class and individual cars
+that are stamped from the blueprint are the objects
+or object instances of the car class.
+In this class, you will create a python application, in which
+you will create a class definition, create a constructor
+for the class and getters and setters to get the attributes
+from the class or object, and represent the class as a string
+for output.
+We will then create object instances based on the class
+definitions.
+You will use the objects to organize data by sorting them.
+As you can see on the slide,
+there is a sample run of the finished project.
+We will be using visual studio code for this class.
+We will mainly be using the Explorer ,Code Explorer view
+rather, up in the upper left corner with little rectangles.
+We will use the run often run without the bugging most of
+the time.
+And then we will also use the code editor window.
+As you can see up in the top up on the top right
+of the slide.
+You will notice that there are two panels on your screen.
+I will be working on the panel on your right.
+That is where I will demonstrate and cover your lesson
+material.
+Your work will take place on the panel on the left.
+There you can work along with me and get real hands
+on practice that makes this training so effective.
+Remember you can pause the recording at any time to type
+in the code, run the code and make corrections as we go.
+In the first task, we will prepare the class by by analyzing
+the class requirements.
+We will look at the input file to see what the class
+requirements are.
+We will then create a class definition.
+We will create an object instance of the class, and we
+will print one of the attributes using a  using the dot
+operator.
+So as you can see on the slide, this is the example
+of the class that we will create.
+Okay, let's get started.
+You will see visual studio code open with the python classes
+project loaded up here in the code (editor) window.
+You will see the python file already loaded classes dot p y.
+We will be working in this file in the project.
+But first, let's take a look at the cars dot C S V file
+over here on the left.
+Just click on that.
+And that is the input file that we will be using to populate
+our cars.
+Okay, so this is what I'm looking at for the specifications
+for the class definition we're going to create.
+So you see, we need to make a model, a color, a year
+and a price to represent the car.
+So let's go back to the classes that p y file and we'll go
+ahead and create a class car and end with the colon .. this is very
+similar to the way we define a function.
+Then we add our attributes we use.
+The first line of the file is an example for attributes
+we have make, model, 
+Here. Sorry.
+Color = red.
+... Year equals 2013 and  price ... we'll just make it
+10,000.
+Okay,,
+So we have a class definition for a car next, outside of the
+car class definition.
+So we will just leave ourselves a couple of spaces.
+Make sure we are back outside of the car.
+Class. Definition we will create our object instance of a car
+just by providing an object name.
+Car equals the car class.
+Okay, they would print the  car's model, and then we'll add
+the model.
+We use the dot operator to access the the attributes.
+Okay, so there we have it.
+Created an object instance of our car.
+Now we can simply run the code in our model is lesabre.
+So as an exercise, you can go ahead and print the other
+attributes of the car.
+Very good.
+You have no created your first class and python create an
+object.
+Created an object instance of the class.
+In the next lesson, we will create the constructor to allow
+us to pass parameters into the class When we create an object.
+See you next time.
