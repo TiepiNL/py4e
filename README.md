@@ -19,10 +19,12 @@ I currently follow the [Python for Everybody Specialization] MOOC at Coursera. I
 **Current course: Using Python to Access Web Data**
 - [x] Week 1 - Getting Started
 - [x] Week 2 - Regular Expressions (Chapter 11)
-- [ ] Week 3 - Networks and Sockets (Chapter 12)
+- [x] Week 3 - Networks and Sockets (Chapter 12)
 - [ ] Week 4 - Programs that Surf the Web (Chapter 12)
 - [ ] Week 5 - Web Services and XML (Chapter 13)
 - [ ] Week 6 - JSON and the REST Architecture (Chapter 13)
+
+Handy: [Py4e.com Materials]
 
 
 [Python for Everybody Specialization]:                                https://www.coursera.org/specializations/python
@@ -31,3 +33,4 @@ I currently follow the [Python for Everybody Specialization] MOOC at Coursera. I
 [Using Python to Access Web Data]:                                    https://www.coursera.org/learn/python-network-data
 [Using Databases with Python]:                                        https://www.coursera.org/learn/python-network-data
 [Capstone: Retrieving, Processing, and Visualizing Data with Python]: https://www.coursera.org/learn/python-data-visualization
+[Py4e.com Materials]: https://www.py4e.com/materials.php

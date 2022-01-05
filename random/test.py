@@ -1,2 +1,3 @@
 #
-import __phello__.spam
+n = 1
+print(n / 50)

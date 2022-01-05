@@ -1,0 +1,94 @@
+{
+    "note": "This file contains the test cses for assignment a1",
+    "num_buses": [
+        {
+            "arguments": 0,
+            "expected": 0,
+            "description": "Zero passengers - no bus needed"
+        },
+        {
+            "arguments": 1,
+            "expected": 1,
+            "description": "A single passenger"
+        },
+        {
+            "arguments": 50,
+            "expected": 1,
+            "description": "A full bus"
+        },
+        {
+            "arguments": 51,
+            "expected": 2,
+            "description": "Full bus + 1"
+        },
+        {
+            "arguments": 500,
+            "expected": 10,
+            "description": "A bunch of full buses"
+        },
+        {
+            "arguments": 501,
+            "expected": 11,
+            "description": "A bunch of buses"
+        }
+    ],
+    "stock_price_summary": [
+        {
+            "arguments": "[]",
+            "expected": "(0, 0)",
+            "description": "Empty list"
+        },
+        {
+            "arguments": "[0]",
+            "expected": "(0, 0)",
+            "description": "Single zero value"
+        },
+        {
+            "arguments": "[0.01]",
+            "expected": "(0.01, 0)",
+            "description": "Single positive value"
+        },
+        {
+            "arguments": "[0.01, 100]",
+            "expected": "(100.01, 0)",
+            "description": "Multiple positive values"
+        },
+        {
+            "arguments": "[-0.01, -100]",
+            "expected": "(0, -100.01)",
+            "description": "Multiple negative values"
+        },
+        {
+            "arguments": "[0.01, 0.03, -0.02, -0.14, 0, 0, 0.10, -0.01]",
+            "expected": "(0.14, -0.17)",
+            "description": "Multiple mixed values"
+        }
+    ],
+    "swap_k": [
+        {
+            "arguments": "[], 0",
+            "expected": "[]",
+            "description": "Empty list with zero swaps"
+        },
+        {
+            "arguments": "[1, 2, 3], 0",
+            "expected": "[1, 2, 3]",
+            "description": "List with zero swaps (stays untouched)"
+        },
+        {
+            "arguments": "[1, 2, 3, 4, 5, 6], 2",
+            "expected": "[5, 6, 3, 4, 1, 2]",
+            "description": "int-based multi-char swap in even items list"
+        },
+        {
+            "arguments": "[1, 2, 3, 4, 5, 6, 7], 3",
+            "expected": "[5, 6, 7, 4, 1, 2, 3]",
+            "description": "list with odd number of items"
+        },
+        {
+            "arguments": "['abc', 'xyz'], 1",
+            "expected": "['xyz', 'abc']",
+            "description": "string-based list with minimum number of elements (2)"
+        }
+    ]
+}
