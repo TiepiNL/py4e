@@ -85,7 +85,7 @@ class A3Tests(unittest.TestCase):
         self.assertEqual(actuals, expected)
 
     def test_read_words(self):
-        testcases = ['.\\toronto\\wordslist1.txt']
+        testcases = ['.\\toronto1\\wordslist1.txt']
         expected = [['CRUNCHY', 'COWS', 'EAT', 'GRASS']]
         actuals = []
         for case in testcases:
@@ -98,7 +98,7 @@ class A3Tests(unittest.TestCase):
         self.assertEqual(actuals, expected)
 
     def test_read_board(self):
-        testcases = ['.\\toronto\\board1.txt']
+        testcases = ['.\\toronto1\\board1.txt']
         expected = [[['E', 'F', 'J', 'A', 'J', 'C', 'O', 'W', 'S', 'S'],
                      ['S', 'D', 'G', 'K', 'S', 'R', 'F', 'D', 'F', 'F'],
                      ['A', 'S', 'R', 'J', 'D', 'U', 'S', 'K', 'L', 'K'],

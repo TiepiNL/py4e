@@ -151,23 +151,22 @@ def write_textfile(file, content):
 
 
 def get_agent_version():
-    """
+    '''
     Retrieve the Check_MK Agent version.
     :return: agent version (str) - e.g. '1.6.0p18'
-    """
-    cmd = f"{quote(CHECK_MK_AGENT)} version"
+    '''
+    # Use the registry to get the path of the agent executable.
+    # This should return a string like:
+    # "C:\Program Files (x86)\checkmk\service\check_mk_agent.exe"
+    exe = win32_service.LocateSpecificServiceExe('CheckMkService')
+    cmd = f'{quote(exe)} version'
     result = run_command(cmd)
     # The output should look like "Check_MK Agent version 1.6.0p18".
-    # Strip the prefix to get the version number.
-    pfx = "Check_MK Agent version"
+    pfx = 'Check_MK Agent version'
     pos = result.find(pfx)
     if pos == -1:
-        log.error("Command output has an unexpected format.")
-        sys.exit(1)
-
+        return 'unknown'
     version = (result[pos + len(pfx):]).strip()
-    logtxt = f"Successfully retrieved the agent version: '{version}'."
-    log.info(logtxt)
     return version
 
 
