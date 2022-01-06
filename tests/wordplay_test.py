@@ -3,7 +3,7 @@ Unit tests of the WordPlay project code.
 '''
 import doctest
 import unittest
-import abc.word_magic as prj
+import words.wordplay as prj
 
 
 class TestSameStartEndEnd(unittest.TestCase):

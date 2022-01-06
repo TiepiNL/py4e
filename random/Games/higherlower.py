@@ -1,4 +1,5 @@
 import logging as log
+import math
 from random import randrange
 from console import clear_console
 
@@ -19,13 +20,19 @@ def get_max_turns(lvl):
     """
     >>>
     """
+    # Use the logarithm method to calculate the amount of turns a computer
+    # needs (worst case) for the given range, and set a multiply this
+    # with a multiplier based on the level.
+    # This way the max turns dynamically adjusts if ranges get changed.
+    maxnr = math.log(get_max_number(lvl), 2)
     match str(lvl):
         case '1':      # easy
-            return 7
+            multiplier = 2
         case '2':      # normal
-            return 12
+            multiplier = 1.3
         case '3':      # hard
-            return 16
+            multiplier = 1
+    return int(maxnr * multiplier)
 
 
 def get_computer_score(random_nbr, max_nbr):
@@ -52,8 +59,9 @@ def get_computer_score(random_nbr, max_nbr):
         elif guess < random_nbr:
             val_too_low = guess
             guess += (val_too_high - guess) // 2
-
+    
     return attempts
+
 
 def play_higherlower(level):
     max_turns = get_max_turns(level)

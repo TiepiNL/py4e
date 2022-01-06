@@ -1,5 +1,5 @@
 import unittest
-import toronto2.a1 as a1
+import a1
 
 
 class TestNumBuses(unittest.TestCase):

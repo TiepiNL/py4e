@@ -1,5 +1,5 @@
 import unittest             # The test framework
-import toronto.a2 as prj    # The code to test
+import toronto1.a2 as prj    # The code to test
 
 
 class A2Tests(unittest.TestCase):

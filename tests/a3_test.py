@@ -1,5 +1,5 @@
 import unittest             # The test framework
-import toronto.a3 as prj    # The code to test
+import toronto1.a3 as prj    # The code to test
 import pathlib
 
 
