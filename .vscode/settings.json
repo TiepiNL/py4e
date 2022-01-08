@@ -1,4 +1,7 @@
 {
+    "[python]": {
+        "editor.formatOnPaste": false
+    },
     "python.testing.unittestArgs": [
         "-v",
         "-s",
