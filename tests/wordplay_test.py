@@ -1,5 +1,11 @@
 '''
 Unit tests of the WordPlay project code.
+
+pip install requests
+pip install unittest
+import unittest
+from unittest.mock import Mock
+import requests
 '''
 import doctest
 import unittest

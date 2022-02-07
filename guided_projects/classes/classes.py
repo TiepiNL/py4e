@@ -8,7 +8,7 @@ class Car:
         self.year = year
         # _ = 'hidden'
         self._price = price
-    
+
     # Property decorator
     @property
     # Getter

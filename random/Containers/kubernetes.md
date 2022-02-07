@@ -82,10 +82,70 @@ Delete the Deployment.
 kubectl delete deployment/<app_name>
 ```
 
+## Scaling and Updating Applications
+### Scaling the application using a ReplicaSet
+Use the `scale` command to scale up your Deployment.
+```
+kubectl scale deployment <app_name> --replicas=3
+```
+
+### Perform rolling updates
+Get a status of the rolling update by using the following command:
+```
+kubectl rollout status deployment/hello-world
+```
+
+You can also get the Deployment with the wide option to see that the new tag is used for the image.
+```
+kubectl get deployments -o wide
+```
+
+Kubernetes can roll back the Deployment like this:
+```
+kubectl rollout undo deployment/hello-world
+```
+
+### Using a ConfigMap to store configuration
+ConfigMaps and Secrets are used to store configuration information separate from the code so that nothing is hardcoded. It also lets the application pick up configuration changes without needing to be redeployed.
+
+Create a ConfigMap. e.g. one that contains a new message:
+```
+kubectl create configmap app-config --from-literal=MESSAGE="This message came from a ConfigMap!"
+```
+
+Apply a new Deployment configuration:
+```
+kubectl apply -f deployment-configmap-env-var.yaml
+```
+
+Because the configuration is separate from the code, the message - or other variable - can be changed without rebuilding the image. Using the following command, delete the old ConfigMap and create a new one with the same name but a different message.
+```
+kubectl delete configmap app-config && kubectl create configmap app-config --from-literal=MESSAGE="This message is different, and you didn't have to rebuild the image!"
+```
+
+Restart the Deployment so that the containers restart. This is necessary since the environment variables are set at start time.
+```
+kubectl rollout restart deployment hello-world
+```
+
+Delete the Deployment:
+```
+kubectl delete -f deployment-configmap-env-var.yaml
+```
+
+Delete a Service:
+```
+kubectl delete service hello-world
+```
+
+
+
 ## IBM Labs
 - Hands-on Lab: [Introduction to Kubernetes]
+- Hands-on Lab: [Introduction to Containers w/ Docker, Kubernetes & OpenShift]
 - [Coding project template]
 
 [Introduction to Kubernetes]: https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/cc201/labs/2_IntroKubernetes/instructions.md.html
 [Coding project template]:    https://github.com/ibm-developer-skills-network/CC201/tree/master/labs/2_IntroKubernetes
 
+[Introduction to Containers w/ Docker, Kubernetes & OpenShift]: https://cf-courses-data.s3.us.cloud-object-storage.appdomain.cloud/cc201/labs/3_K8sScaleAndUpdate/instructions.md
