@@ -1,4 +1,6 @@
 #pylint: skip-file
-from random import randrange
-random_nbr = randrange(1, 100)
-print(random_nbr)
+
+
+abc = "With three words"
+stuff = abc.split()
+print(stuff)

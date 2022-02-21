@@ -4,25 +4,22 @@ Tom's playground to practice Python.
 
 ## Coursera
 
-I currently follow the [Python for Everybody Specialization] MOOC at Coursera. I use this repo to store my course assignments, and some small projects to practise (perhaps they once become repos on their own).
+I have followed the [Python for Everybody Specialization] (py4e) MOOC at Coursera. I use this repo to store my course assignments, and some small projects to practise (perhaps they once become repos on their own).
 
 ### Progress
 
-**Courses:**
+**Python for Everybody Specialization - courses:**
 - [x] [Programming for Everybody (Getting Started with Python)]
-- [X] [Python Data Structures]
-- [ ] [Using Python to Access Web Data]
-- [ ] [Using Databases with Python]
-- [ ] [Capstone: Retrieving, Processing, and Visualizing Data with Python]
+- [x] [Python Data Structures]
+- [x] [Using Python to Access Web Data]
+- [x] [Using Databases with Python]
+- [x] [Capstone: Retrieving, Processing, and Visualizing Data with Python]
 
+**Other Python MOOCs that I follow / have followed:**
+- [x] [Learn to Program: The Fundamentals]
+- [x] [Learn to Program: Crafting Quality Code]
+- [x] [Python Programming: A Concise Introduction]
 
-**Current course: Using Python to Access Web Data**
-- [x] Week 1 - Getting Started
-- [x] Week 2 - Regular Expressions (Chapter 11)
-- [x] Week 3 - Networks and Sockets (Chapter 12)
-- [ ] Week 4 - Programs that Surf the Web (Chapter 12)
-- [ ] Week 5 - Web Services and XML (Chapter 13)
-- [ ] Week 6 - JSON and the REST Architecture (Chapter 13)
 
 Handy: [Py4e.com Materials]
 
@@ -33,4 +30,8 @@ Handy: [Py4e.com Materials]
 [Using Python to Access Web Data]:                                    https://www.coursera.org/learn/python-network-data
 [Using Databases with Python]:                                        https://www.coursera.org/learn/python-network-data
 [Capstone: Retrieving, Processing, and Visualizing Data with Python]: https://www.coursera.org/learn/python-data-visualization
-[Py4e.com Materials]: https://www.py4e.com/materials.php
+[Py4e.com Materials]:                                                 https://www.py4e.com/materials.php
+
+[Learn to Program: The Fundamentals]:                                 https://www.coursera.org/learn/learn-to-program
+[Learn to Program: Crafting Quality Code]:                            https://www.coursera.org/learn/program-code
+[Python Programming: A Concise Introduction]:                         https://www.coursera.org/learn/python-programming-introduction
