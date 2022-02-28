@@ -126,9 +126,9 @@ The `-c` (or `--config`) argument sets the [agent's configuration files] (defaul
 ### Config - section
 
 ```
-py checkmk.py -config --section mrpe --no-open
+py checkmk.py -config --section mrpe
 ```
-The `--section` (or `-s`) argument sets the config scope to retrieve. In this case, only the keys within the mrpe section will be retrieved. This only works with the running config ('all'), because it depends on the `check_mk_agent.exe showconfig [section]` command. With the `--no-open` flag set, the text file won't be opened.
+The `--section` (or `-s`) argument sets the config scope to retrieve. In this case, only the keys within the mrpe section will be retrieved. This only works with the running config ('all'), because it depends on the `check_mk_agent.exe showconfig [section]` command.
 <p><img src="./img/config_section_example.png" width="720px" height="129px" alt="Example result of config action with a section scope"></p>
 
 ### Config - question
@@ -158,7 +158,7 @@ Extracts the critical and warning messages from the checkmk agent log file, writ
 ### Log - unused sections
 
 ```
-py checkmk.py log --byexception --no-open
+py checkmk.py log --byexception
 ```
 If the log file contains warnings about unused sections, the log action with `--byexception` flag will also report these sections.
 <p><img src="./img/log_sections_example.png" width="720px" height="179px" alt="Example result of log action with unused section recommendations"></p>
